@@ -2,31 +2,60 @@ import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import BooksList from './BooksList';
 import * as BooksAPI from './BooksAPI';
+import PropTypes from 'prop-types';
 import './App.css';
 
 class SearchBooks extends Component {
+  static propTypes = {
+    existingBooks: PropTypes.array.isRequired,
+    onUpdateBooks: PropTypes.func.isRequired
+  };
+
   state = {
     query: '',
     books: []
   }
 
-  updateResults(newQuery) {
-    BooksAPI.search(newQuery)
-    .then((books) => {
-      this.setState({query: newQuery.trim()});
-      this.setState({books: books.map((book) => {
-        // Return existing shelves books with their shelf property set
-        const existing = this.props.existingBooks.find((bk) => (bk.id === book.id));
-        if(existing) {
-          return existing;
+  /*
+   * On search field change, update results "after" query async setState is done.
+   * This is to avoid query state unwanted reset with search term quick typing.
+   */
+  handleChange(newQuery) {
+    this.setState({query: newQuery}, ()=>this.updateResults());
+  }
+
+  /*
+   * Fetch updated search results then set books state accordingly.
+   */
+  updateResults() {
+    const {query} = this.state;
+    const {existingBooks} = this.props;
+    // if query state contains some value,
+    // fetch search results and assign them to books state
+    if(query.trim() !== '') {
+      BooksAPI.search(query)
+      .then((books) => {
+        // if some response that is not an error is returned
+        if(books && !books.error) {
+          this.setState({books: books.map((book) => {
+            // Return existing shelves books with their shelf property set to value
+            const existing = existingBooks.find((bk) => (bk.id === book.id));
+            if(existing) {
+              return existing;
+            }
+            return book;
+          })});
+        } else { // if undefined response or an error is returned
+          this.setState({books: []});
         }
-        return book;
-      })});
-    })
-    .catch((error) => {
+      })
+      .catch((error) => {
+        this.setState({books: []});
+        console.log('Error searching', error);
+      });
+    } else { // if query state is empty, set books state to empty list
       this.setState({books: []});
-      console.log('Error searching', error);
-    });
+    }
   }
 
   render() {
@@ -49,13 +78,13 @@ class SearchBooks extends Component {
             <input
               type="text" value={query}
               placeholder="Search by title or author"
-              onChange={(event) => this.updateResults(event.target.value)}
+              onChange={(event) => this.handleChange(event.target.value)}
             />
           </div>
         </div>
         <div className="search-books-results">
           <BooksList
-            books={books}
+            books={query.trim() !== '' ? books : []}
             onUpdateBooks={onUpdateBooks}
           />
         </div>

@@ -1,5 +1,7 @@
 import React from 'react';
 import Book from './Book';
+import PropTypes from 'prop-types';
+import sortBy from 'sort-by';
 import './App.css';
 
 /*
@@ -7,15 +9,22 @@ import './App.css';
  * For every book list item, Book functional component is used.
  */
 const BooksList = (props) => {
-
-  const {books, onUpdateBooks} = props;
+  const {books, orderBy, onUpdateBooks} = props;
 
   if(!books || books.length === 0) {
     return (<ol className="books-grid"></ol>);
   } else {
+    let sortedBooks;
+    // if orderBy prop is passed, sort books accordingly
+    if(orderBy && orderBy !== '') {
+      sortedBooks = books.sort(sortBy(orderBy));
+    } else { // if sortBy is not passed or empty, return unsorted books
+      sortedBooks = books;
+    }
+
     return (
       <ol className="books-grid">
-        {books.map((book) => (
+        {sortedBooks.map((book) => (
           <li key={book.id}>
             <Book
               book={book}
@@ -31,5 +40,11 @@ const BooksList = (props) => {
     );
   }
 }
+
+BooksList.propTypes = {
+  books: PropTypes.array.isRequired,
+  sortBy: PropTypes.string,
+  onUpdateBooks: PropTypes.func.isRequired
+};
 
 export default BooksList;

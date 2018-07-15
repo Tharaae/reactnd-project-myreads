@@ -31,7 +31,6 @@ class BooksApp extends Component {
    * Get All books list once main app component is mounted
    */
   componentDidMount() {
-    console.log('componentDidMount');
     BooksAPI.getAll()
     .then((allBooks) => {
       this.setState({allBooks});
@@ -49,6 +48,7 @@ class BooksApp extends Component {
 
   /*
    * When a child Book in a child BookShelf moved to a new shelf,
+   * or when a new book is added to one of the shelves,
    * update the App state to re-render
    */
   updateBooks = (book, newShelf) => {
@@ -112,6 +112,7 @@ class BooksApp extends Component {
                       <div className="bookshelf-books">
                         <BooksList
                           books={allBooks.filter((book) => (shelf.booksIds.includes(book.id)))}
+                          orderBy='title'
                           onUpdateBooks={this.updateBooks}
                         />
                       </div>
