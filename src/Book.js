@@ -2,6 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './App.css';
 
+/*
+ * This functional component displays the passed book details.
+ * This component is used by BookList component to display every list item.
+ */
 const Book = (props) => {
 
   const {book, onChangeShelf} = props;
@@ -11,7 +15,7 @@ const Book = (props) => {
     let bookImage;
     if(book.imageLinks) {
       bookImage = book.imageLinks.thumbnail? book.imageLinks.thumbnail : '/img/noimage.jpg';
-    } else {
+    } else { // if image does not exist, display placeholder image
       bookImage = '/img/noimage.jpg';
     }
 
