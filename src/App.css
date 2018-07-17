@@ -69,6 +69,11 @@ body,
   font-size: 0;
 }
 
+.empty-shelf-message{
+  font-size: 1.5em;
+  color: #aaa;
+}
+
 /* search page */
 
 .search-books-bar {

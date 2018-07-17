@@ -12,7 +12,7 @@ const BooksList = (props) => {
   const {books, orderBy, onUpdateBooks} = props;
 
   if(!books || books.length === 0) {
-    return (<ol className="books-grid"></ol>);
+    return (<p className="empty-shelf-message">No books are on this shelf yet.</p>);
   } else {
     let sortedBooks;
     // if orderBy prop is passed, sort books accordingly

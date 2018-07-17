@@ -21,7 +21,7 @@ class BooksApp extends Component {
       },
       {
         key: 'read',
-        title: 'Read',
+        title: 'Already Read',
         booksIds: []
       }
     ]
@@ -36,9 +36,10 @@ class BooksApp extends Component {
       this.setState({allBooks});
       this.setState((st) => (
         {shelves: st.shelves.map((shelf) => {
-          shelf.booksIds = allBooks
+          const booksIds = allBooks
             .filter((book) => (book.shelf === shelf.key))
             .map((book) => book.id);
+          shelf.booksIds = booksIds? booksIds : [];
           return shelf;
         })
       }));
@@ -74,7 +75,8 @@ class BooksApp extends Component {
       }
       // Update the current booksIds in shelves state from the returning data
       this.setState((st) => ({shelves: st.shelves.map((shelf) => {
-        shelf.booksIds = data[shelf.key];
+        const booksIds = data[shelf.key];
+        shelf.booksIds = booksIds? booksIds : [];
         return shelf;
       })}));
     })
@@ -90,8 +92,8 @@ class BooksApp extends Component {
         {/* go to Seach Books when url includes /search */}
         <Route path="/search" render={() => (
           <SearchBooks
-            onUpdateBooks={this.updateBooks}
             existingBooks={allBooks}
+            onUpdateBooks={this.updateBooks}
           />
         )} />
 
