@@ -103,6 +103,7 @@ class SearchBooks extends Component {
         <div className="search-books-results">
           <BooksList
             books={books}
+            page='search'
             onUpdateBooks={onUpdateBooks}
           />
         </div>

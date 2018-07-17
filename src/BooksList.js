@@ -9,11 +9,10 @@ import './App.css';
  * For every book list item, Book functional component is used.
  */
 const BooksList = (props) => {
-  const {books, orderBy, onUpdateBooks} = props;
+  const {books, orderBy, page, onUpdateBooks} = props;
 
-  if(!books || books.length === 0) {
-    return (<p className="empty-shelf-message">No books are on this shelf yet.</p>);
-  } else {
+  // if non-empty books list is passed
+  if(books && books.length !== 0) {
     let sortedBooks;
     // if orderBy prop is passed, sort books accordingly
     if(orderBy && orderBy !== '') {
@@ -38,6 +37,13 @@ const BooksList = (props) => {
         ))}
       </ol>
     );
+  } else { // if books list is not defined or empty
+    // if current page is search
+    if(page && page === 'search') {
+      return (<ol className="books-grid"></ol>);
+    } else { // if main page, display empty shelf message
+      return (<p className="empty-shelf-message">No books are on this shelf yet.</p>);
+    }
   }
 }
 
