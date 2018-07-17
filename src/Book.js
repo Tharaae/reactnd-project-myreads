@@ -13,8 +13,8 @@ const Book = (props) => {
   if(book) {
     // check if book image exists
     let bookImage;
-    if(book.imageLinks) {
-      bookImage = book.imageLinks.thumbnail? book.imageLinks.thumbnail : '/img/noimage.jpg';
+    if(book.imageLinks && book.imageLinks.thumbnail) {
+      bookImage = book.imageLinks.thumbnail;
     } else { // if image does not exist, display placeholder image
       bookImage = '/img/noimage.jpg';
     }

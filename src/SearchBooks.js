@@ -39,8 +39,8 @@ class SearchBooks extends Component {
    handleChange(query) {
      // reset timer
      clearTimeout(this.typingTimer);
-     // call updateResults function after 0.5 second if no further typing interrupts meanwhile
-     this.typingTimer = setTimeout(this.updateResults, 500, query);
+     // call updateResults function after 0.3 second if no further typing interrupts meanwhile
+     this.typingTimer = setTimeout(this.updateResults, 300, query);
    }
 
   /*
